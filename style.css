@@ -1,0 +1,335 @@
+/* --- Global Reset & Foundation --- */
+
+/* --- NEW: CYBER FORENSIC THEME --- */
+body {
+    /* High-resolution Cyber Background with Dark Overlay for readability */
+    background-image: linear-gradient(rgba(10, 14, 20, 0.9), rgba(10, 14, 20, 0.9)), 
+                      url('https://images4.alphacoders.com/135/thumb-1920-1358905.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Blinking Status Dot */
+.blink-status {
+    width: 10px;
+    height: 10px;
+    background-color: #10b981;
+    border-radius: 50%;
+    animation: blink-pulse 1s infinite alternate;
+    box-shadow: 0 0 10px #10b981;
+}
+
+@keyframes blink-pulse {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0.4; transform: scale(1.2); }
+}
+
+/* Home Navigation Grid */
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.nav-card {
+    text-decoration: none;
+    background: rgba(30, 41, 59, 0.7);
+    padding: 30px 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* Cyber Hover Effect */
+.nav-card:hover {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: var(--primary-blue);
+    transform: translateY(-10px);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+}
+
+.nav-card .nav-icon {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.nav-card h3 {
+    font-size: 0.85rem !important;
+    color: #fff !important;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+/* Cyber Document Container */
+.cyber-doc {
+    border-left: 5px solid var(--primary-blue);
+    background: rgba(15, 23, 42, 0.5);
+    padding: 25px;
+    border-radius: 0 15px 15px 0;
+}
+
+:root {
+    --risk-color: #10b981; 
+    --bg-dark: #020617; /* Deeper midnight blue */
+    --bg-card: rgba(15, 23, 42, 0.8);
+    --primary-blue: #38bdf8;
+    --primary-purple: #818cf8;
+    --success-green: #10b981;
+    --danger-red: #ef4444;
+    --text-muted: #64748b;
+    --text-main: #f1f5f9;
+    --glow-blue: rgba(56, 189, 248, 0.3);
+}
+
+body {
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.1) 0%, transparent 40%);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+}
+
+/* --- Forensic Dashboard Layout --- */
+#audit-container {
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: auto;
+}
+
+section {
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+/* --- The "Beautiful" Icon & Card Fix --- */
+.forensic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.data-card {
+    background: var(--bg-card);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The Cyber Accent Line on cards */
+.data-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+    opacity: 0.5;
+}
+
+.data-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-blue);
+    box-shadow: 0 10px 30px -10px var(--glow-blue);
+}
+
+.data-card h3 {
+    margin: 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--primary-blue);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.data-card span, .data-card strong {
+    display: block;
+    font-size: 1.6rem;
+    margin-top: 10px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+/* --- Buttons (Cyber Style) --- */
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+}
+
+.primary-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 20px var(--primary-blue);
+    transform: scale(1.02);
+}
+
+/* --- Inputs & Textarea --- */
+textarea, input[type="text"] {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: white;
+    padding: 18px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 4px var(--glow-blue);
+}
+
+/* --- Result & Forensic Insights --- */
+.result-box {
+    background: #000000;
+    border: 1px solid rgba(129, 140, 248, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    position: relative;
+}
+
+#tone-result-text::after {
+    content: "SCAN_COMPLETE";
+    position: absolute;
+    top: -10px; right: 20px;
+    background: var(--primary-purple);
+    font-size: 0.6rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: black;
+    font-weight: 900;
+}
+
+/* --- Typography --- */
+h2 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    background: linear-gradient(to bottom right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+}
+
+/* --- HIDE ALL ERRORS --- */
+.error-container, #error-display, .invalid-link-msg, [id*="error"] {
+    display: none !important;
+    height: 0 !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* --- Phishing Insight Box Styling --- */
+.forensic-insight-glow {
+    margin-top: 20px;
+    border-top: 2px solid rgba(56, 189, 248, 0.4) !important;
+    padding-top: 25px;
+    text-align: left;
+    background: rgba(15, 23, 42, 0.9);
+}
+
+.insight-title {
+    color: #38bdf8;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+}
+
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    background: #38bdf8;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #38bdf8;
+    animation: pulse-blue 2s infinite;
+}
+
+.result-text-display {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+    white-space: pre-line; /* Essential for Qwen's formatting */
+    font-family: 'Fira Code', monospace;
+}
+
+.engine-attribution {
+    color: #64748b;
+    margin-top: 20px;
+    font-size: 0.85rem;
+    font-style: italic;
+    border-left: 2px solid #334155;
+    padding-left: 10px;
+}
+
+@keyframes pulse-blue {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(56, 189, 248, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+}
+
+/* Styling for the Deep Policy Audit Report */
+#audit-result-text {
+    font-family: 'Fira Code', monospace; /* Professional terminal look */
+    line-height: 1.6;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    color: #e0e0e0;
+    max-height: 600px; /* Limits height so it doesn't break page layout */
+    overflow-y: auto;  /* Adds a scrollbar inside the report box */
+}
+
+/* Styling for the A, B, C headers inside the AI response */
+#audit-result-text b, #audit-result-text strong {
+    color: #00d4ff; /* Highlight the categories */
+    display: block;
+    margin-top: 15px;
+}
+
+#phishing-result-text {
+    font-family: 'Fira Code', monospace;
+    background-color: #0a0e14; /* Darker background for contrast */
+    color: #00d4ff; /* Tech-blue text */
+    padding: 15px;
+    border-left: 3px solid #00d4ff;
+    line-height: 1.5;
+    max-height: 500px; /* Limits height */
+    overflow-y: auto;  /* Allows scrolling for the 10 points */
+    margin-top: 10px;
+}

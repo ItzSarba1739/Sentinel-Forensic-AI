@@ -1,0 +1,41 @@
+Phishing Link Send through : [http://127.0.0.1:5500/index.html?mode=phishing&url=http://malicious-site.net&ssl=Unverified] this type of link 
+Policy Link Send through : [http://127.0.0.1:5500/sentinel-system/frontend/index.html#policy]
+Veracity link Send through : [http://127.0.0.1:5500/sentinel-system/frontend/index.html#veracity]
+ Direct Veracity Access : [http://127.0.0.1:5500/sentinel-system/frontend/index.html?text=New+economic+reports+suggest+that+decentralized+autonomous+organizations+will+replace+traditional+banking+by+the+year+2030.#veracity], [http://127.0.0.1:5500/sentinel-system/frontend/index.html?text=A+secret+study+reveals+that+drinking+liquid+gold+cures+all+known+diseases+instantly+and+grants+immortality.#veracity], [http://127.0.0.1:5500/sentinel-system/frontend/index.html?text=The+Earth+revolves+around+the+Sun+in+an+elliptical+orbit+taking+approximately+365+days.#veracity]
+Tone Link Send through : [http://127.0.0.1:5500/sentinel-system/frontend/index.html#tone]
+ Direct Tone Access Link : [http://127.0.0.1:5500/sentinel-system/frontend/index.html?tone_text=URGENT:+Your+bank+account+has+been+flagged+for+suspicious+activity.+Click+here+to+verify+within+10+minutes+or+access+will+be+permanently+revoked.#tone], [http://127.0.0.1:5500/sentinel-system/frontend/index.html?tone_text=The+industrial+revolution+was+a+period+of+significant+technological+advancement+that+transformed+agrarian+societies+into+industrialized+urban+centers+through+the+implementation+of+steam+power.#tone], [http://127.0.0.1:5500/sentinel-system/frontend/index.html?tone_text=Everyone+knows+that+this+new+policy+is+a+disaster.+Only+people+who+hate+progress+would+ever+support+such+a+radical+and+dangerous-move.#tone]
+DeepFake_Picture_videos Link through : [http://127.0.0.1:5500/sentinel-system/frontend/index.html#deepfake]
+
+
+
+Run korar Procedure:
+open CMD 1: type ollama serve
+open cmd 2: venv\Scripts\activate
+in that page type: pip install --upgrade scikit-learn
+in that page type : python train_model.py
+in that very next line to type : uvicorn main:app --host 127.0.0.1 --port 8003 --reload
+3. Strat the front-end : select "index.html" file then Click to the "Go Live Button" and then the server will be online
+
+Privacy Policy Checking Examples :
+
+Google Meet (Communication App)
+"Google Cloud does not use customer data for advertising and does not sell customer data to third parties. Meet recordings stored in Google Drive are encrypted at rest by default. Google does not store video or audio records of a meeting unless the recording, transcript, or note-taking feature is activated. All data is encrypted while it travels over the internet, although calls made via a phone company's network might not be encrypted. Meeting codes are long and hard to guess to prevent unauthorized access."
+
+Google Maps (Navigation/Location)
+"We collect location information when you use our services, which helps us offer features like driving directions, search results for things near you, and ads based on your location. This includes GPS and other sensor data from your device, IP address, and information about things near your device, such as Wi-Fi access points and cell towers. We may also collect device-specific information such as your hardware model, operating system version, unique device identifiers, and mobile network information including your phone number. We aim to provide you with access to your personal information and ways to update or delete it, unless we must keep it for legitimate business or legal purposes.
+
+TikTok (Entertainment/Social Media)
+"We automatically collect certain information from you when you use the Platform, including internet activity such as your IP address, geolocation-related data, unique device identifiers, browsing and search history, and Cookies. We collect and process, which includes scanning and analyzing, information you provide in the context of composing, sending, or receiving messages through the Platform’s messaging functionality. This includes the content of the message and information about when it was sent, received, or read. If you choose to find other users through your phone contacts, we will access names and phone numbers to match them against existing users.
+
+Instagram (Photo Sharing)
+"By using our Service you understand and agree that we are providing a platform for you to post content publicly. This means other Users may search for, see, use, or share any of your User Content that you make publicly available. We may share User Content and your information (including cookies, log files, device identifiers, location data, and usage data) with businesses that are legally part of the same group of companies. We may also share certain information such as cookie data with third-party advertising partners to deliver targeted advertisements.
+
+Stripe (Business/Finance Related)
+"We collect Transaction Data which may include your name, email address, contact number, billing and shipping address, and payment method information like bank account details or payment card images. We use contact information to deliver our Services, which may involve sending codes via SMS for authentication. We do not share mobile data collected for authentication purposes with third parties for marketing or promotional purposes. Where permitted under law, we may record and transcribe our calls with you to perform research, quality assurance, and for training purposes.
+
+Standard Business App (General Template)
+  "We use Your Personal data to provide and improve the Service. While using Our Service, We may ask You to provide Us with personally identifiable information that can be used to contact or identify You, including your email address, name, and phone number. We use Cookies and similar tracking technologies to track activity and store certain information, such as beacons, tags, and scripts to improve and analyze Our Service. Tracking and Performance Cookies are used to track traffic to the Website and how users use the Website, which may indirectly identify you as an individual visitor.
+
+  ngrok http --url=appeasing-village-chummy.ngrok-free.dev 8003
+
+  

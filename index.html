@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:,">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel Deep Audit</title>
+    <!-- CSS link - ensure style.css exists in a /css folder -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        :root {
+            --risk-color: #10b981; /* Controlled by router.js */
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #0f172a;
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        #audit-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            min-height: 100vh; 
+        }
+
+        section { padding-top: 20px; display: none; }
+
+        /* Scanning Animation */
+        .scanning-line {
+            width: 100%;
+            height: 2px;
+            background: rgba(56, 189, 248, 0.2);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .scanning-line::after {
+            content: "";
+            display: block;
+            width: 30%;
+            height: 100%;
+            background: #38bdf8;
+            animation: scan 2s infinite linear;
+        }
+        @keyframes scan {
+            from { left: -30%; }
+            to { left: 100%; }
+        }
+
+        /* Forensic Data Grid */
+        .forensic-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .data-card {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-top: 3px solid var(--risk-color); /* Changes color based on Risk Index */
+        }
+        .data-card h3 {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+        .data-card span, .data-card strong {
+            display: block;
+            font-size: 1.2rem;
+            margin-top: 5px;
+        }
+
+        #app-message {
+            margin: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            border-left: 5px solid #10b981;
+        }
+
+        .long-description {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin-top: 40px;
+            padding-bottom: 100px;
+        }
+
+        .hero-title {
+        font-size: 2.2rem;
+        background: linear-gradient(to right, #38bdf8, #818cf8);
+        background-clip: text; /* Standard Property */
+        -webkit-background-clip: text; /* Vendor Prefix */
+        -webkit-text-fill-color: transparent;
+        color: transparent; /* Fallback */
+        }
+
+        /* AI Interaction UI (For local Phi-4 execution) */
+        .ai-audit-box {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            margin: 20px 0;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            background: #020617;
+            color: #38bdf8;
+            border: 1px solid #334155;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .btn-audit {
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 700;
+            position: relative;
+            z-index: 10;
+            cursor: pointer !important;
+            pointer-events: auto !important;
+            transition: background 0.3s ease;
+        }
+        .btn-audit:hover { background: #7dd3fc; }
+        .btn-audit:disabled { opacity: 0.5; cursor: wait; }
+        
+        #audit-result-text {
+            margin-top: 15px;
+            padding: 15px;
+            background: #020617;
+            border-left: 3px solid #38bdf8;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            min-height: 40px;
+        }
+
+        .audit-result-box {
+        margin-top: 15px;
+        border-radius: 8px;
+        color: #e2e8f0;
+        transition: all 0.3s ease;
+        }
+
+        /* CYBERPUNK THEME UPGRADES */
+        body {
+            background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('https://images4.alphacoders.com/135/thumb-1920-1358905.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        .blink-status {
+            width: 10px;
+            height: 10px;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation: blink 1s infinite alternate;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        @keyframes blink {
+            from { opacity: 1; }
+            to { opacity: 0.3; }
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .nav-card {
+            text-decoration: none;
+            background: rgba(30, 41, 59, 0.6);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .nav-card:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);
+        }
+
+        .nav-card h3 {
+            font-size: 0.8rem;
+            color: #fff;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Hover effect for all data cards */
+        .data-card:hover {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            transition: 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="audit-container">
+    <!-- Notification system for incoming app data -->
+    <div id="app-message" style="display:none; background-color: #064e3b; color: #ecfdf5;">
+        <strong>Note from Sentinel:</strong> <span id="message-text"></span>
+    </div>
+
+    <section id="home" style="display: block !important; text-align: center; padding-top: 50px;">
+        <div style="position: absolute; top: 20px; right: 20px; display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.6); padding: 5px 15px; border-radius: 50px; border: 1px solid #10b981;">
+            <div class="blink-status"></div>
+            <span style="color: #10b981; font-size: 0.7rem; font-weight: bold; letter-spacing: 1px;">SERVER ACTIVE</span>
+        </div>
+
+        <h1 class="hero-title" style="font-size: 4rem; margin-bottom: 10px; filter: drop-shadow(0 0 10px #38bdf8);">SENTINEL-AI</h1>
+        <p style="color: #38bdf8; letter-spacing: 5px; font-weight: bold; margin-bottom: 40px;">FORENSIC CENTRE</p>
+
+        <div class="cyber-doc" style="max-width: 700px; margin: 0 auto 50px auto; background: rgba(15, 23, 42, 0.8); padding: 30px; border-radius: 15px; border: 1px solid rgba(56, 189, 248, 0.3); backdrop-filter: blur(10px);">
+            <h2 style="color: #fff; text-align: left; border-left: 4px solid #38bdf8; padding-left: 15px;">Cyber Security Intelligence</h2>
+            <p style="text-align: left; color: #cbd5e1; line-height: 1.6; font-size: 0.95rem;">
+                Welcome to the Sentinel Forensic Core. Our system utilizes decentralized neural logic to deconstruct digital threats in real-time. By utilizing local Qwen2.5 (3B Parameterized) LLM execution, we ensure that your forensic data never leaves your hardware. Select a module below to initiate a structural deconstruction of suspicious links, media, or text, Be Safe, Be Secure.
+            </p>
+        </div>
+
+        <div class="nav-grid">
+            <a href="#phishing" class="nav-card">
+                <span class="nav-icon">🔗</span>
+                <h3>Phishing Scan</h3>
+            </a>
+            <a href="#deepfake" class="nav-card">
+                <span class="nav-icon">👁️</span>
+                <h3>Deepfake Audit</h3>
+            </a>
+            <a href="#tone" class="nav-card">
+                <span class="nav-icon">🎭</span>
+                <h3>Tone Analysis</h3>
+            </a>
+            <a href="#veracity" class="nav-card">
+                <span class="nav-icon">⚖️</span>
+                <h3>Veracity Check</h3>
+            </a>
+            <a href="#policy" class="nav-card">
+                <span class="nav-icon">📜</span>
+                <h3>Privacy Policy</h3>
+            </a>
+        </div>
+    </section>
+
+    <!-- <header>
+    <h1>SENTINEL FORENSIC SYSTEM</h1>
+    
+    <div id="system-status-container" style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 8px 15px; border-radius: 20px; width: fit-content; margin: 10px auto;">
+        <div id="status-dot" style="width: 10px; height: 10px; background: #94a3b8; border-radius: 50%; box-shadow: 0 0 5px #94a3b8;"></div>
+        <span id="status-text" style="font-size: 0.85rem; color: #94a3b8; font-weight: bold; letter-spacing: 1px;">BACKEND: OFFLINE</span>
+    </div>
+</header> -->
+
+    <!-- PHI-4 INTERACTION (This links with setupPrivacyAudit in router.js) Policy detection-->
+            <!--div class="ai-audit-box">
+                <h3 style="margin-top:0; color:#38bdf8;">Phi-4 Forensic Brain</h3>
+                <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Paste policy text or suspect strings for local LLM reasoning.</p>
+                <textarea id="policy-text-input" placeholder="Paste data for deep audit..."></textarea>
+                <button id="run-audit-btn" class="btn-audit">Run Forensic Audit</button>
+                <div id="audit-result-text">System Ready...</div>
+            </div -->
+
+            
+        <!-- /section -->
+
+        <!-- PHISHING SECTION (Fully Automated Mode) -->
+<section id="phishing">
+    <div class="scanning-line"></div>
+    <h1 class="hero-title">URL Integrity Scan</h1>
+
+    <!-- This will automatically update when the link comes from your friend's app -->
+    <p>Auditing Target: <strong id="target-display" style="color: #38bdf8; font-family: monospace;">Awaiting External Signal...</strong></p>
+    
+    <div class="forensic-grid">
+        <div class="data-card">
+            <h3>Scan Details</h3>
+            <strong class="dynamic-risk" id="risk-score">Analyzing...</strong>
+        </div>
+        
+        <div class="data-card" style="border-top: 2px solid #38bdf8;">
+            <h3>AI Accuracy</h3>
+            <strong id="phishing-accuracy-score" style="color: #38bdf8;">--%</strong>
+        </div>
+
+        <div class="data-card">
+            <h3>SSL Status</h3>
+            <span class="dynamic-ssl" id="ssl-status">Checking...</span>
+        </div>
+        <div class="data-card">
+            <h3>Logic Gate</h3>
+            <span style="color: #38bdf8;">Qwen 2.5 3B</span>
+        </div>
+        <div class="data-card">
+            <h3>System Status</h3>
+            <span id="engine-status">Active</span>
+        </div>
+    </div>
+
+    <div class="manual-input-container" style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <input type="text" id="manual-url-input" placeholder="Enter URL manually (e.g., http://example.com)" 
+               style="flex-grow: 1; padding: 12px; border-radius: 8px; border: 1px solid #38bdf8; background: #0f172a; color: white;">
+        <button id="run-manual-scan" style="padding: 10px 20px; background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+            RUN SCAN
+        </button>
+    </div>
+    
+    <!-- AI Forensic Insight Box (Autostarts on Page Load) -->
+    <div class="data-card forensics-card forensic-insight-glow">
+        <h4 class="insight-title">
+            <span class="pulse-dot"></span>
+            Qwen Deep-Link Audit (Automated)
+        </h4>
+        <div id="phishing-result-text" class="result-text-display">
+            Initializing structural deconstruction...
+        </div>
+    </div>
+
+    <p class="engine-attribution">
+        Sentinel Core: Deep-link forensic analysis triggered via external application bridge.
+    </p>
+</section>
+        
+        <!-- PHISHING SECTION (Qwen 2.5) 
+<section id="phishing">
+    <div class="scanning-line"></div>
+    <h1 class="hero-title">URL Integrity Scan</h1> -->
+    
+    <!-- FIX: Added id="target-display" for JavaScript syncing 
+    <p>Target: <strong id="target-display" class="dynamic-target" style="color: #38bdf8;">Pending Analysis...</strong></p>
+    
+    <div class="forensic-grid">
+        <div class="data-card">
+            <h3>Risk Index</h3>
+            <strong class="dynamic-risk">0%</strong>
+        </div>
+        <div class="data-card">
+            <h3>SSL Status</h3>
+            <span class="dynamic-ssl">Verified</span>
+        </div>
+        <div class="data-card">
+            <h3>Logic Gate</h3>
+            <span style="color: #38bdf8;">Qwen 2.5 3B</span>
+        </div>
+        <div class="data-card">
+            <h3>ML Engine</h3>  -->
+            <!-- Note: Keeping text for UI consistency, but logic is now Qwen 
+            <span>Neural Sentinel v2.0</span>
+        </div>
+    </div>  -->
+
+    <!-- AI Forensic Insight Box 
+    <div class="data-card forensics-card forensic-insight-glow">
+        <h4 class="insight-title">
+            <span class="pulse-dot"></span>
+            Qwen Deep-Link Audit
+        </h4>
+        <p id="phishing-result-text" class="result-text-display">
+            Waiting for structural deconstruction...
+        </p>
+    </div>
+
+    <p class="engine-attribution">
+        Sentinel Core: Utilizing Qwen 2.5 3B via Ollama for deep-link structural analysis and metadata forensics.
+    </p>
+</section>  -->
+
+
+        <section id="tone" class="audit-section">
+    <div class="audit-header">
+        <h2>Tone & Intent Audit</h2>
+        <p>Psycholinguistic deconstruction using Qwen 2.5 3B Engine.</p>
+    </div>
+
+    <div class="audit-container">
+        <div class="input-group">
+            <textarea id="tone-text-input" placeholder="Paste the suspicious message or email text here..." rows="6"></textarea>
+            <button id="run-tone-btn" class="primary-btn">Analyze Intent</button>
+        </div>
+
+        <div class="forensic-display">
+            <div class="status-bar">
+                <span class="engine-tag">Engine: Qwen 2.5</span>
+                <span class="status-tag">Status: Ready</span>
+                <span class="engine-tag" style="border-left: 1px solid #475569; padding-left: 10px;">
+                    Accuracy: <span id="tone-accuracy" style="color: #38bdf8;">--%</span>
+                </span>
+            </div>
+            <!-- The Result Box -->
+            <div id="tone-result-text" class="result-box">
+                Waiting for structural deconstruction...
+            </div>
+        </div>
+    </div>
+</section>
+
+          <!-- POLICY SECTION (Qwen-2.5 AI) -->
+<section id="policy">
+    <div class="scanning-line"></div>
+    <h1 class="hero-title">Deep Policy Audit</h1>
+    <p>Analyzing: <strong class="dynamic-target" style="color: #38bdf8;">Loading...</strong></p>
+
+    <div class="forensic-grid" style="grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+        <div class="data-card" style="padding: 10px; border-top: 2px solid #38bdf8;">
+            <h3 style="font-size: 0.8rem; margin: 0;">AI Accuracy</h3>
+            <strong id="policy-accuracy" style="color: #38bdf8; font-size: 1.2rem;">--%</strong>
+        </div>
+        <div class="data-card" style="padding: 10px; border-top: 2px solid #38bdf8;">
+            <h3 style="font-size: 0.8rem; margin: 0;">Logic Gate</h3>
+            <span style="color: #e2e8f0; font-weight: bold; font-size: 1rem;">Qwen 2.5</span>
+        </div>
+    </div>
+
+    <div class="ai-audit-box">
+        <h3 style="margin-top:0; color:#38bdf8;">Qwen-2.5 Forensic Brain</h3>
+        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">
+            Auditing Hardware Permissions (Sensors/Media), Data Sharing, and GDPR/CCPA User Rights.
+        </p>
+        <textarea id="policy-text-input" placeholder="Paste the full privacy policy or terms of service here..."></textarea>
+        <button id="run-audit-btn" class="btn-audit" style="background: #38bdf8;">Initiate AI Audit</button>
+        
+        <!-- NEW: Structured Output Container -->
+        <div id="audit-result-text" class="audit-result-box" 
+             style="white-space: pre-line; text-align: left; border-left: 4px solid #38bdf8; background: rgba(56, 189, 248, 0.05); padding: 20px; margin-top: 15px; line-height: 1.7; color: #e2e8f0;">
+            Waiting for policy input to scan for technical red flags...
+        </div>
+    </div>
+
+    <div class="long-description">
+        <h2>The Anatomy of Data Privacy</h2>
+        <p>Our local Qwen engine deconstructs legal jargon to identify <strong>Permission Creep</strong> and <strong>Third-Party Data Leaks</strong> without sending your text to external servers.</p>
+    </div>
+</section>
+
+        <!-- DEEPFAKE & VIDEO VERACITY SECTION -->
+<section id="deepfake">
+    <div class="scanning-line"></div>
+    <h1 class="hero-title">Multimedia Veracity (DeepFake Detector)</h1>
+    <p>Engine: <strong style="color: #f43f5e;">LightFakeDetect + Qwen 2.5</strong></p>
+
+    <!-- The Forensic Grid -->
+    <div class="forensic-grid">
+        <div class="data-card">
+            <h3>Generative Probability</h3>
+             <strong id="df-risk-display" class="dynamic-risk">--%</strong> 
+        </div>
+
+        <div class="data-card" style="border-top: 2px solid #f43f5e;">
+            <h3>AI Accuracy</h3>
+            <strong id="media-accuracy" style="color: #f43f5e; font-size: 1.5rem;">--%</strong>
+        </div>
+        
+        <div class="data-card">
+            <h3>Biometric Sync</h3>
+            <span id="df-sync-display">Awaiting...</span>
+        </div>
+        <div class="data-card">
+            <h3>Lighting Vector</h3>
+            <span id="df-light-display">Analyzing...</span>
+        </div>
+    </div>
+
+    <!-- The Interactive Upload Box (New logic) -->
+    <div class="ai-audit-box" style="border: 2px dashed rgba(244, 63, 94, 0.3); margin-top: 30px;">
+        <h3 style="color: #f43f5e;">Forensic Media Scanner</h3>
+        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">
+            Upload images (GAN check) or videos (Temporal Jitter scan).
+        </p>
+        <input type="file" id="deepfake-input" accept="image/*,video/mp4" style="margin-bottom: 15px; color: #94a3b8; width: 100%;">
+        <button id="run-deepfake-btn" class="btn-audit" style="background: #f43f5e; width: 100%;">Run Forensic Scan</button>
+        
+        <div id="deepfake-result-text" class="audit-result-box" 
+             style="background: rgba(244, 63, 94, 0.05); border-left: 4px solid #f43f5e; padding: 20px; margin-top: 20px; text-align: left; font-size: 0.9rem; white-space: pre-line;">
+            Awaiting media for artifact analysis...
+        </div>
+    </div>
+</section>
+
+<hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 60px 0;">
+
+<!-- VERACITY CHECKER SECTION -->
+<section id="veracity">
+    <div class="scanning-line"></div>
+    <h1 class="hero-title">Information Veracity</h1>
+    <p>Model: <strong style="color: #10b981;">Qwen 2.5 Forensic Fact-Check</strong></p>
+
+    <!-- The Forensic Grid (Kept from old design) -->
+    <div class="forensic-grid">
+        <div class="data-card">
+            <h3>Truth Probability</h3>
+            <strong id="v-truth-display" class="dynamic-risk">--%</strong>
+        </div>
+        <div class="data-card">
+            <h3>AI Accuracy</h3>
+            <strong id="v-consensus-display" style="font-size: 1.5rem;">--%</strong>
+        </div>
+        <div class="data-card">
+            <h3>Logical Integrity</h3>
+            <span id="v-logic-display">Scanning...</span>
+        </div>
+    </div>
+
+    <!-- The Interactive Audit Box (New logic) -->
+    <div class="ai-audit-box" style="border: 2px solid rgba(16, 185, 129, 0.2); margin-top: 30px;">
+        <h3 style="color: #10b981;">Evidence & Consensus Auditor</h3>
+        <textarea id="veracity-text-input" placeholder="Paste claim or article text here..."></textarea>
+        <button id="run-veracity-btn" class="btn-audit" style="background: #10b981; width: 100%;">Verify Information</button>
+        
+        <div id="veracity-result-text" class="audit-result-box" 
+             style="background: rgba(16, 185, 129, 0.05); border-left: 4px solid #10b981; padding: 20px; margin-top: 20px; text-align: left; line-height: 1.7; white-space: pre-line;">
+            Waiting for text input to perform consensus analysis...
+        </div>
+    </div>
+</section>
+
+        <!-- ERROR STATE -->
+        <!-- <section id="error">
+            <h1 style="color: #ef4444;">Invalid Audit Link</h1>
+            <p>Please return to the Sentinel App and try again.</p>
+        </section>
+
+    </div>  -->
+
+    <!-- Router Logic - ensure router.js exists in a /js folder -->
+    <script src="js/router.js"></script>
+</body>
+</html>
