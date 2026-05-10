@@ -111,7 +111,10 @@ Paste The text → AI Permission Scan → Truth Accurcy Detection → Simplified
    ```
 
    # Install Libraries
+   Open your terminal and run:
+   ```bash
    pip install fastapi uvicorn pydantic requests
+   ```
 
 3. **Run the Server**:
     Open your terminal and run:
@@ -200,7 +203,10 @@ We welcome security enthusiasts and developers to improve the Sentinel Core!
     3. Code Style: We follow PEP8 for Python and clean ES6 standards for JS.
 
 -    **Development Workflow**:
+
+        ```
       - Fork the repo → Create a branch → Commit changes → Open a Pull Request.
+      ```
 
 ### Code Style
 
