@@ -61,22 +61,22 @@ By leveraging **Qwen 2.5 3B** locally via Ollama, Sentinel deconstructs digital 
 
 ## 🎬 Demo (Core Modules)
 
-### 1. Phishing Scan Workflow
+### 1. 🔗 Phishing Scan Workflow
 ```
 Home → URL Integrity Scan → Automated/Manual Input → Qwen Neural Audit → 10-Point Report.
 ```
 
-### 2. Deepfake Analysis Image and Video
+### 2. 👁️ Deepfake Analysis Image and Video
 ```
 Upload Image/Video → Metadata Deconstruction → Lighting/Biometric Check → Generative Probability Score.
 ```
 
-### 3. Privacy Policy Audit
+### 3. 📜 Privacy Policy Audit
 ```
 Paste Legal Jargon → AI Permission Scan → Red-Flag Detection → Simplified User-Rights Report.
 ```
 
-### 3. Tone and Veracity Text Audit
+### 4. 🎭 Tone and ⚖️ Veracity Text Audit
 ```
 Paste The text → AI Permission Scan → Truth Accurcy Detection → Simplified Accurate Text Report.
 ```
@@ -181,6 +181,13 @@ The server will start on [http://127.0.0.1:8003]
     - Local Security: No data is uploaded to the cloud; all analysis happens on your CPU/GPU.
 
 ---
+
+##  ⚠️ Troubleshooting
+
+   - **Backend Offline Error** : Ensure main.py is running and your router.js API_URL matches [http://127.0.0.1:8003].
+   - **Ollama Connection Refused** : Ensure the Ollama app is running in your Windows System Tray.
+   - **CORS Error** : The main.py included has CORSMiddleware configured to allow local connections. If blocked, check your browser extensions.
+
 
 ##  🤝 Contributing
 We welcome security enthusiasts and developers to improve the Sentinel Core!
